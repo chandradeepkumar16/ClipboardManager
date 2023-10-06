@@ -37,6 +37,7 @@ fun ClipboardManagerApp() {
 
     val clipboardTexts = remember { mutableStateListOf<ClipboardItem>() }
     val coroutineScope = rememberCoroutineScope()
+
     var searchQuery by remember { mutableStateOf("") }
     val filteredClipboardTexts = remember { mutableStateListOf<ClipboardItem>() }
 
@@ -115,7 +116,6 @@ fun ClipboardManagerApp() {
                 if (filteredClipboardTexts.size > 100) {
                     filteredClipboardTexts.removeLast()
                 }
-
                 delay(1000) // Check the clipboard every 1 second
             }
         }
