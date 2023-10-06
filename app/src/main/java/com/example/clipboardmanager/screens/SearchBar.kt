@@ -28,8 +28,6 @@ fun SearchBar(
     onSearchQueryChange: (String) -> Unit,
     onSearch: () -> Unit
 ) {
-
-
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shadowElevation = 4.dp,
