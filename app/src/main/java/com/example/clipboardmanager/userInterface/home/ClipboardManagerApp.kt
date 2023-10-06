@@ -1,4 +1,4 @@
-package com.example.clipboardmanager.screens
+package com.example.clipboardmanager.userInterface.home
 
 import android.content.ClipboardManager
 import android.util.Log
@@ -25,13 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
+import com.example.clipboardmanager.widgets.ClipboardItemCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 
-fun ClipboardManagerApp() {
+fun ClipboardManagerApp(navController: NavController) {
     val context = LocalContext.current
     val clipboardManager = remember { context.getSystemService<ClipboardManager>() }
 
@@ -86,7 +88,7 @@ fun ClipboardManagerApp() {
                     .padding(8.dp)
             ) {
                 items(filteredClipboardTexts) { item ->
-                    ClipboardItemCard(clipboardItem = item)
+                    ClipboardItemCard(clipboardItem = item, navController)
                     Log.d("check", "$item")
                 }
             }

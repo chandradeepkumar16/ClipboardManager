@@ -1,4 +1,4 @@
-package com.example.clipboardmanager.screens
+package com.example.clipboardmanager.widgets
 
 
 import androidx.compose.foundation.background
@@ -26,12 +26,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
+import com.example.clipboardmanager.navigation.AppScreens
+import com.example.clipboardmanager.userInterface.editScreen.EditScreen
 import com.example.clipboardmanager.util.DateFormatting
 
 
 @Composable
-fun ClipboardItemCard(clipboardItem: ClipboardItem) {
+fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavController) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +98,7 @@ fun ClipboardItemCard(clipboardItem: ClipboardItem) {
                         modifier = Modifier
                             .size(18.dp)
                             .clickable {
-//                            onEditClick()
+                                navController.navigate(route = AppScreens.EditScreen.name)
                             }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
