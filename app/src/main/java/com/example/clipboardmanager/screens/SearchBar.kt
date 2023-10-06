@@ -1,4 +1,4 @@
-package com.example.clipboardmanager.userInterface
+package com.example.clipboardmanager.screens
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
