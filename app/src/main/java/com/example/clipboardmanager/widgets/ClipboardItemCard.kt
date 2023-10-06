@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
 import com.example.clipboardmanager.util.DateFormatting
+import com.example.clipboardmanager.util.shareText
 
 @Composable
 fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavController) {
@@ -98,8 +99,14 @@ fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavControlle
                         modifier = Modifier
                             .size(15.dp)
                             .clickable {
-                                shareText(clipboardItem.text,context)
-                                Toast.makeText(context.applicationContext,"share on your apps",Toast.LENGTH_SHORT).show()
+                                shareText(text = clipboardItem.text, context = context)
+                                Toast
+                                    .makeText(
+                                        context.applicationContext,
+                                        "share on your apps",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
                             }
                     ) {
                         Icon(imageVector = Icons.Default.Share, contentDescription = "Copy")
@@ -124,15 +131,6 @@ fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavControlle
 }
 
 
-
-// Function to share text with other apps
-private fun shareText(text: String, context: Context) {
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_TEXT, text)
-    val shareIntent = Intent.createChooser(intent, null)
-    context.startActivity(shareIntent)
-}
 
 
 
