@@ -16,7 +16,7 @@ import java.util.Locale
 @Composable
 fun DateFormatting(){
     var formattedDateTime by remember { mutableStateOf("") }
-    val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy hh:mm:ss a", Locale.getDefault())
     val currentDateTime = Date()
     formattedDateTime = dateFormat.format(currentDateTime)
 
