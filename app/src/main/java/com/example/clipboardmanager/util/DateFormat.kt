@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -20,8 +21,5 @@ fun DateFormatting(){
     val currentDateTime = Date()
     formattedDateTime = dateFormat.format(currentDateTime)
 
-    Text(
-        text = "Timestamp: $formattedDateTime",
-        modifier = Modifier.padding(6.dp)
-    )
+    Text("Timestamp: $formattedDateTime", fontSize = 10.sp)
 }
