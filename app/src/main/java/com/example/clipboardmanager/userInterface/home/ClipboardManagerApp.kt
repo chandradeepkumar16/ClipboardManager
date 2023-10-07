@@ -89,7 +89,7 @@ fun ClipboardManagerApp(navController: NavController) {
             ) {
                 items(filteredClipboardTexts) { item ->
                     ClipboardItemCard(clipboardItem = item, navController)
-                    Log.d("check", "$item")
+
                 }
             }
         }
