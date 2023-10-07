@@ -2,6 +2,8 @@ package com.example.clipboardmanager.widgets
 
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.graphics.drawable.Animatable
 import android.widget.Toast
 import androidx.compose.animation.Animatable
@@ -40,8 +42,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -50,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
@@ -62,13 +67,17 @@ import kotlin.math.absoluteValue
 @Composable
 fun ClipboardItemCard(
     clipboardItem: ClipboardItem,
-    navController: NavController
+    navController: NavController,
+    onDeleteClick: (ClipboardItem) -> Unit
 ) {
 
     val context = LocalContext.current
     var isFlipped by remember {
         mutableStateOf(false)
     }
+
+    val clipboardManager = remember { context.getSystemService<ClipboardManager>() }
+
 
     val frontContent: @Composable () -> Unit = {
 
@@ -192,6 +201,9 @@ fun ClipboardItemCard(
                         .size(20.dp)
                         .clickable {
                             // Handle delete action here
+                            onDeleteClick(clipboardItem)
+                            clipboardManager?.setPrimaryClip(ClipData.newPlainText(null, ""))
+
                         }
                 )
             }
@@ -200,8 +212,7 @@ fun ClipboardItemCard(
 
 
 
-
-    val content: @Composable () -> Unit = if (isFlipped) backContent else frontContent
+    val content: @Composable () -> Unit = if (isFlipped) backContent else  frontContent
 
     Box {
         content()

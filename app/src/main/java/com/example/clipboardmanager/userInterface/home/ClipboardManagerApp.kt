@@ -88,8 +88,14 @@ fun ClipboardManagerApp(navController: NavController) {
                     .padding(8.dp)
             ) {
                 items(filteredClipboardTexts) { item ->
-                    ClipboardItemCard(clipboardItem = item, navController)
-
+                    ClipboardItemCard(clipboardItem = item,
+                        navController ,
+                        onDeleteClick = { deletedItem ->
+                            // Handle card deletion here
+                            clipboardTexts.remove(deletedItem) // Remove the item from clipboardTexts
+                            filteredClipboardTexts.remove(deletedItem) // Remove the item from filteredClipboardTexts
+                        }
+                    )
                 }
             }
         }
