@@ -2,7 +2,6 @@ package com.example.clipboardmanager.util
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.runtime.Composable
 
 // Function to share text with other apps
  fun shareText(text: String, context: Context) {

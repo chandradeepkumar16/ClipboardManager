@@ -1,10 +1,6 @@
 package com.example.clipboardmanager.widgets
 
 
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Divider
@@ -29,12 +24,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
@@ -42,12 +35,10 @@ import com.example.clipboardmanager.util.DateFormatting
 import com.example.clipboardmanager.util.shareText
 
 @Composable
-fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavController) {
-
+fun ClipboardItemCard(clipboardItem: ClipboardItem
+                      , navController: NavController) {
 
     val context = LocalContext.current
-    val clipboardManager = remember { context.getSystemService<ClipboardManager>() }
-
 
     Surface(
         modifier = Modifier
@@ -75,6 +66,7 @@ fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavControlle
                         .padding(3.dp)
                 )
             }
+
 
             Divider(thickness = 1.dp, color = Color.Black)
 
@@ -113,7 +105,6 @@ fun ClipboardItemCard(clipboardItem: ClipboardItem , navController: NavControlle
                     }
 
                     Spacer(modifier = Modifier.width(18.dp))
-
 
                     Box(
                         modifier = Modifier

@@ -1,10 +1,9 @@
 package com.example.clipboardmanager.navigation
 
-import com.example.clipboardmanager.userInterface.home.ClipboardManagerApp
-
 enum class AppScreens {
     ClipboardManagerApp,
     EditScreen;
+
 
     companion object{
         fun fromRoute(route:String?): AppScreens
@@ -15,4 +14,7 @@ enum class AppScreens {
             else -> throw IllegalArgumentException("Route $route is not recognized")
         }
     }
+
+
+
 }

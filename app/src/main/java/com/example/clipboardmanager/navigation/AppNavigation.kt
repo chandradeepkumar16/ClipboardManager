@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clipboardmanager.userInterface.editScreen.EditScreen
 import com.example.clipboardmanager.userInterface.home.ClipboardManagerApp
 
+
 @Composable
 fun AppNavigation(){
 
@@ -23,5 +24,6 @@ fun AppNavigation(){
         }
 
     }
+
 
 }
