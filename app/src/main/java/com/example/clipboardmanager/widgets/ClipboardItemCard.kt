@@ -203,15 +203,13 @@ fun ClipboardItemCard(
                             // Handle delete action here
                             onDeleteClick(clipboardItem)
                             clipboardManager?.setPrimaryClip(ClipData.newPlainText(null, ""))
-
+                            isFlipped=!isFlipped
                         }
                 )
             }
         }
     }
-
-
-
+    
     val content: @Composable () -> Unit = if (isFlipped) backContent else  frontContent
 
     Box {

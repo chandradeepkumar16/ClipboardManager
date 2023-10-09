@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "499328742236",
+    "project_id": "clipboard-manager-9c2bf",
+    "storage_bucket": "clipboard-manager-9c2bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499328742236:android:9b97db27ba358b7ae30799",
+        "android_client_info": {
+          "package_name": "com.example.clipboardmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh7efyYwOXP9aZoxFy1UhTtcChrlgb9_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -48,13 +48,13 @@ fun ClipboardManagerApp(navController: NavController) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Clipboard Manager",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
+//        Text(
+//            text = "Clipboard Manager",
+//            style = MaterialTheme.typography.bodyLarge,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(bottom = 16.dp)
+//        )
 
         Column {
             SearchBar(

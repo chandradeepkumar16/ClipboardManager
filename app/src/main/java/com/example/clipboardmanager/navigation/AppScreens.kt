@@ -2,7 +2,8 @@ package com.example.clipboardmanager.navigation
 
 enum class AppScreens {
     ClipboardManagerApp,
-    EditScreen;
+    EditScreen,
+    LoginPage;
 
 
     companion object{
@@ -10,6 +11,7 @@ enum class AppScreens {
                 =when (route?.substringBefore("/")){
             ClipboardManagerApp.name -> ClipboardManagerApp
             EditScreen.name -> EditScreen
+            LoginPage.name -> LoginPage
             null -> ClipboardManagerApp
             else -> throw IllegalArgumentException("Route $route is not recognized")
         }
