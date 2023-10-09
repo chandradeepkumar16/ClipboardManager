@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,9 +40,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 
 fun SideBarWithContent(
-    navController: NavController = rememberNavController(), // Pass the NavController as a parameter
+    navController: NavController,
     appNavigation: @Composable () -> Unit,
 ) {
+
     var selectedOption by remember { mutableStateOf("") }
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -93,7 +95,8 @@ fun SideBarWithContent(
                     color = if (selectedOption == "Logout") Color.Blue else Color.Black,
                     modifier = Modifier.clickable {
 
-//                        navController.navigate(AppScreens.LoginPage.name) // Use the provided NavController
+                        navController.navigate(route = AppScreens.LoginPage.name)
+
 
                         selectedOption = "Logout"
                         scope.launch {
@@ -137,4 +140,5 @@ fun SideBarWithContent(
         }
     )
 }
+
 

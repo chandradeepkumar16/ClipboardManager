@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clipboardmanager.R
+import com.example.clipboardmanager.navigation.AppScreens
 
 
 //@Preview
@@ -164,7 +165,10 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp)
                     .clip(RoundedCornerShape(16.dp)) // Rounded corners
             ) {
-                Text(text = "Login")
+                Text(text = "Login",
+                modifier = Modifier.clickable {
+                    navController.navigate(route = AppScreens.ClipboardManagerApp.name)
+                })
             }
             Spacer(modifier = Modifier.height(16.dp))
 

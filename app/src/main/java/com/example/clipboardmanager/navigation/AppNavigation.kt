@@ -7,24 +7,24 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clipboardmanager.userInterface.editScreen.EditScreen
 import com.example.clipboardmanager.userInterface.home.ClipboardManagerApp
 import com.example.clipboardmanager.userInterface.intro.LoginScreen
+import com.example.clipboardmanager.widgets.SideBarWithContent
 
 
 @Composable
 fun AppNavigation(){
-
     val navController = rememberNavController()
-    NavHost(navController = navController,
-        startDestination = AppScreens.ClipboardManagerApp.name){
 
-        composable(AppScreens.ClipboardManagerApp.name){
-            ClipboardManagerApp(navController = navController)
+
+    NavHost(navController = navController, startDestination = AppScreens.ClipboardManagerApp.name) {
+        composable(AppScreens.ClipboardManagerApp.name) {
+            SideBarWithContent(navController = navController) {
+                ClipboardManagerApp(navController = navController)
+            }
         }
-
-        composable(AppScreens.EditScreen.name){
+        composable(AppScreens.EditScreen.name) {
             EditScreen(navController = navController)
         }
-        
-        composable(AppScreens.LoginPage.name){
+        composable(AppScreens.LoginPage.name) {
             LoginScreen(navController = navController)
         }
 
