@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clipboardmanager.R
 import com.example.clipboardmanager.navigation.AppNavigation
 import com.example.clipboardmanager.navigation.AppScreens
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,6 +44,8 @@ fun SideBarWithContent(
     navController: NavController,
     appNavigation: @Composable () -> Unit,
 ) {
+
+    val auth = FirebaseAuth.getInstance()
 
     var selectedOption by remember { mutableStateOf("") }
 
@@ -95,6 +98,7 @@ fun SideBarWithContent(
                     color = if (selectedOption == "Logout") Color.Blue else Color.Black,
                     modifier = Modifier.clickable {
 
+                        auth.signOut()
                         navController.navigate(route = AppScreens.LoginPage.name)
 
 
@@ -102,7 +106,6 @@ fun SideBarWithContent(
                         scope.launch {
                             drawerState.close()
                         }
-                        // Perform logout action here
                     }
                 )
             }

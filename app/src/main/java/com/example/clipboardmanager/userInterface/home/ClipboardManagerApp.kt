@@ -1,11 +1,10 @@
 package com.example.clipboardmanager.userInterface.home
 
 import android.content.ClipboardManager
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,13 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
+import com.example.clipboardmanager.navigation.AppScreens
 import com.example.clipboardmanager.widgets.ClipboardItemCard
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 
 fun ClipboardManagerApp(navController: NavController) {
+
+
     val context = LocalContext.current
     val clipboardManager = remember { context.getSystemService<ClipboardManager>() }
 
@@ -43,94 +47,103 @@ fun ClipboardManagerApp(navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     val filteredClipboardTexts = remember { mutableStateListOf<ClipboardItem>() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-//        Text(
-//            text = "Clipboard Manager",
-//            style = MaterialTheme.typography.bodyLarge,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(bottom = 16.dp)
-//        )
 
-        Column {
-            SearchBar(
-                searchQuery = searchQuery,
-                onSearchQueryChange = { newQuery ->
-                    searchQuery = newQuery
-                    filteredClipboardTexts.clear()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
 
-                    filteredClipboardTexts.addAll(clipboardTexts.filter { it.text.contains(searchQuery, ignoreCase = true) })
-                },
-                onSearch = {
-                    val matchingTexts = clipboardTexts.filter { it.text.contains(searchQuery, ignoreCase = true) }
-                    filteredClipboardTexts.clear()
-                    filteredClipboardTexts.addAll(matchingTexts)
-                }
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Column {
+                SearchBar(
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { newQuery ->
+                        searchQuery = newQuery
+                        filteredClipboardTexts.clear()
 
-            Text(
-                text = "Copied Texts:",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(start = 4.dp)
-            )
+                        filteredClipboardTexts.addAll(clipboardTexts.filter {
+                            it.text.contains(
+                                searchQuery,
+                                ignoreCase = true
+                            )
+                        })
+                    },
+                    onSearch = {
+                        val matchingTexts =
+                            clipboardTexts.filter { it.text.contains(searchQuery, ignoreCase = true) }
+                        filteredClipboardTexts.clear()
+                        filteredClipboardTexts.addAll(matchingTexts)
+                    }
+                )
 
-            Divider()
+                Spacer(modifier = Modifier.height(16.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-            ) {
-                items(filteredClipboardTexts) { item ->
-                    ClipboardItemCard(clipboardItem = item,
-                        navController ,
-                        onDeleteClick = { deletedItem ->
-                            // Handle card deletion here
-                            clipboardTexts.remove(deletedItem) // Remove the item from clipboardTexts
-                            filteredClipboardTexts.remove(deletedItem) // Remove the item from filteredClipboardTexts
-                        }
-                    )
-                }
-            }
-        }
-    }
+                Text(
+                    text = "Copied Texts:",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
 
-    DisposableEffect(Unit) {
-        val job = coroutineScope.launch {
-            while (true) {
-                val clipData = clipboardManager?.primaryClip
-                val text = clipData?.getItemAt(0)?.text.toString()
+                Divider()
 
-                if (text.isNotEmpty() && !clipboardTexts.any { it.text == text }) {
-                    val clipboardItem = ClipboardItem(text,System.currentTimeMillis())
-                    clipboardTexts.add(0, clipboardItem)
-
-                    // Update filteredClipboardTexts based on the search query
-                    if (searchQuery.isBlank() || clipboardItem.text.contains(searchQuery, ignoreCase = true)) {
-                        filteredClipboardTexts.add(0, clipboardItem)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    items(filteredClipboardTexts) { item ->
+                        ClipboardItemCard(clipboardItem = item,
+                            navController,
+                            onDeleteClick = { deletedItem ->
+                                // Handle card deletion here
+                                clipboardTexts.remove(deletedItem) // Remove the item from clipboardTexts
+                                filteredClipboardTexts.remove(deletedItem) // Remove the item from filteredClipboardTexts
+                            }
+                        )
                     }
                 }
-
-                if (clipboardTexts.size > 100) {
-                    clipboardTexts.removeLast()
-                }
-
-                if (filteredClipboardTexts.size > 100) {
-                    filteredClipboardTexts.removeLast()
-                }
-                delay(1000) // Check the clipboard every 1 second
             }
         }
-        onDispose {
-            job.cancel()
+
+        DisposableEffect(Unit) {
+            val job = coroutineScope.launch {
+                while (true) {
+                    val clipData = clipboardManager?.primaryClip
+                    val text = clipData?.getItemAt(0)?.text.toString()
+
+                    if (text.isNotEmpty() && !clipboardTexts.any { it.text == text }) {
+                        val clipboardItem = ClipboardItem(text, System.currentTimeMillis())
+                        clipboardTexts.add(0, clipboardItem)
+
+                        // Update filteredClipboardTexts based on the search query
+                        if (searchQuery.isBlank() || clipboardItem.text.contains(
+                                searchQuery,
+                                ignoreCase = true
+                            )
+                        ) {
+                            filteredClipboardTexts.add(0, clipboardItem)
+                        }
+                    }
+
+                    if (clipboardTexts.size > 100) {
+                        clipboardTexts.removeLast()
+                    }
+
+                    if (filteredClipboardTexts.size > 100) {
+                        filteredClipboardTexts.removeLast()
+                    }
+                    delay(1000) // Check the clipboard every 1 second
+                }
+            }
+            onDispose {
+                job.cancel()
+            }
         }
-    }
+//        Toast.makeText(context, "Yes user", Toast.LENGTH_SHORT).show()
+
+
+
 }
 
 
