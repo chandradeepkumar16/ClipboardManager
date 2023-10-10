@@ -2,24 +2,35 @@ package com.example.clipboardmanager.userInterface.intro
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -31,20 +42,22 @@ import androidx.navigation.NavController
 import com.example.clipboardmanager.R
 import com.example.clipboardmanager.navigation.AppScreens
 
-
 //@Preview
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(navController: NavController) {
+fun SignupScreen(navController: NavController) {
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Create FocusRequesters for the email and password fields
+    // Create FocusRequesters for the email, password, and confirmPassword fields
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
 
     val density = LocalDensity.current.density
 
@@ -94,12 +107,12 @@ fun LoginScreen(navController: NavController) {
             Column(
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
-                Text("Email")
+                Text("Email") // Hint text
                 BasicTextField(
                     value = email,
                     onValueChange = {
                         email = it
-                        isButtonEnabled = email.isNotBlank() && password.isNotBlank()
+                        isButtonEnabled = isValidSignupInput(email, password, confirmPassword)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
@@ -116,11 +129,10 @@ fun LoginScreen(navController: NavController) {
                         .background(Color.White)
                         .padding(16.dp)
                         .focusRequester(emailFocusRequester)
-                        .clip(RoundedCornerShape(16.dp)) // Rounded corners
                 )
             }
 
-            Spacer(modifier = Modifier.height(26.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Password TextField with hint text
             Column(
@@ -131,7 +143,38 @@ fun LoginScreen(navController: NavController) {
                     value = password,
                     onValueChange = {
                         password = it
-                        isButtonEnabled = email.isNotBlank() && password.isNotBlank()
+                        isButtonEnabled = isValidSignupInput(email, password, confirmPassword)
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            // Request focus for the confirmPassword field
+                            passwordFocusRequester.requestFocus()
+                        }
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(16.dp)
+                        .focusRequester(passwordFocusRequester)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Confirm Password TextField with hint text
+            Column(
+                modifier = Modifier.fillMaxWidth(0.8f)
+            ) {
+                Text("Confirm Password") // Hint text
+                BasicTextField(
+                    value = confirmPassword,
+                    onValueChange = {
+                        confirmPassword = it
+                        isButtonEnabled = isValidSignupInput(email, password, confirmPassword)
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -147,49 +190,40 @@ fun LoginScreen(navController: NavController) {
                         .fillMaxWidth()
                         .background(Color.White)
                         .padding(16.dp)
-                        .focusRequester(passwordFocusRequester)
-                        .clip(RoundedCornerShape(16.dp)) // Rounded corners
+                        .focusRequester(confirmPasswordFocusRequester)
                 )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Login Button
+            // Signup Button
             Button(
                 onClick = {
-                    // Handle login logic here
+                    // Handle signup logic here
                 },
                 enabled = isButtonEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
-                    .clip(RoundedCornerShape(16.dp)) // Rounded corners
             ) {
-                Text(text = "Login",
-                modifier = Modifier.clickable {
-                    navController.navigate(route = AppScreens.ClipboardManagerApp.name)
-                })
+                Text(text = "Signup")
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // Register here text
             Text(
-                text = "Register here",
+                text = "Login here",
                 color = Color.DarkGray,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
-                    navController.navigate(route = AppScreens.SignupPage.name)
+                    navController.navigate(AppScreens.LoginPage.name)
                 }
             )
         }
     }
 }
 
-
-
-
-
-
-
-
-
+private fun isValidSignupInput(email: String, password: String, confirmPassword: String): Boolean {
+    return email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword
+}

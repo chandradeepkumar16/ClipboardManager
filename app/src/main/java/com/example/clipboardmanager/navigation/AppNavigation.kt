@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clipboardmanager.userInterface.editScreen.EditScreen
 import com.example.clipboardmanager.userInterface.home.ClipboardManagerApp
 import com.example.clipboardmanager.userInterface.intro.LoginScreen
+import com.example.clipboardmanager.userInterface.intro.SignupScreen
 import com.example.clipboardmanager.widgets.SideBarWithContent
 
 
@@ -16,6 +17,7 @@ fun AppNavigation(){
 
 
     NavHost(navController = navController, startDestination = AppScreens.ClipboardManagerApp.name) {
+
         composable(AppScreens.ClipboardManagerApp.name) {
             SideBarWithContent(navController = navController) {
                 ClipboardManagerApp(navController = navController)
@@ -26,6 +28,9 @@ fun AppNavigation(){
         }
         composable(AppScreens.LoginPage.name) {
             LoginScreen(navController = navController)
+        }
+        composable(AppScreens.SignupPage.name){
+            SignupScreen(navController=navController)
         }
 
     }
