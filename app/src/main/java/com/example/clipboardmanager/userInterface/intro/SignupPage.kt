@@ -43,8 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clipboardmanager.R
+import com.example.clipboardmanager.data.User
 import com.example.clipboardmanager.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 
 //@Preview
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -220,6 +223,13 @@ fun SignupScreen(navController: NavController) {
 
                  firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
                      if(it.isSuccessful){
+
+                         val currentUser = FirebaseAuth.getInstance().currentUser
+                         if (currentUser != null) {
+                             val user = User(currentUser.uid, email, password)
+                             saveUserDataToDatabase(user)
+                         }
+
                          Toast.makeText(context, "SignUp Successfully", Toast.LENGTH_SHORT).show()
                          navController.navigate(route = AppScreens.ClipboardManagerApp.name)
                      }else{
@@ -252,6 +262,13 @@ fun SignupScreen(navController: NavController) {
 }
 
 
+private fun saveUserDataToDatabase(user: User) {
+    val database = FirebaseDatabase.getInstance()
+    val usersRef = database.getReference("users")
+
+    // Use the user's UID as the key in the database
+    usersRef.child(user.uid).setValue(user)
+}
 
 private fun isValidSignupInput(email: String, password: String, confirmPassword: String): Boolean {
     return email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword

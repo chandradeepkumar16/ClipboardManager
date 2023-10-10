@@ -1,7 +1,8 @@
 package com.example.clipboardmanager.userInterface.home
 
 import android.content.ClipboardManager
-import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,8 +29,6 @@ import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
 import com.example.clipboardmanager.widgets.ClipboardItemCard
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,14 +46,20 @@ fun ClipboardManagerApp(navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     val filteredClipboardTexts = remember { mutableStateListOf<ClipboardItem>() }
 
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+    if (backDispatcher != null) {
+        com.example.clipboardmanager.util.BackHandler(backDispatcher = backDispatcher) {
+            navController.navigate(route = AppScreens.ClipboardManagerApp.name)
+        }
+    }
+
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-
-
             Column {
                 SearchBar(
                     searchQuery = searchQuery,
@@ -106,6 +111,7 @@ fun ClipboardManagerApp(navController: NavController) {
             }
         }
 
+
         DisposableEffect(Unit) {
             val job = coroutineScope.launch {
                 while (true) {
@@ -144,7 +150,13 @@ fun ClipboardManagerApp(navController: NavController) {
 
 
 
+
+
 }
+
+
+
+
 
 
 
