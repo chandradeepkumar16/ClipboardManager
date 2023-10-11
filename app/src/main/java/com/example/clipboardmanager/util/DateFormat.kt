@@ -15,11 +15,12 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun DateFormatting(){
+fun DateFormatting(): String{
     var formattedDateTime by remember { mutableStateOf("") }
     val dateFormat = SimpleDateFormat("dd-MM-yyyy hh:mm:ss a", Locale.getDefault())
     val currentDateTime = Date()
     formattedDateTime = dateFormat.format(currentDateTime)
 
     Text("Timestamp: $formattedDateTime", fontSize = 10.sp)
+    return formattedDateTime
 }

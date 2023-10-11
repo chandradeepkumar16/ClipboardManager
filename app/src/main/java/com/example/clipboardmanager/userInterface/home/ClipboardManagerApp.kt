@@ -37,7 +37,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-
 fun ClipboardManagerApp(navController: NavController) {
 
 
