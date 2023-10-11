@@ -10,8 +10,8 @@ fun BackHandler(
     backDispatcher: OnBackPressedDispatcher,
     onBack: () -> Unit
 ) {
-    val view = LocalView.current
 
+    val view = LocalView.current
     DisposableEffect(view) {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -23,5 +23,6 @@ fun BackHandler(
             callback.remove()
         }
     }
+
 }
 

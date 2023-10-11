@@ -19,6 +19,4 @@ enum class AppScreens {
         }
     }
 
-
-
 }

@@ -1,7 +1,6 @@
 package com.example.clipboardmanager.userInterface.home
 
 import android.content.ClipboardManager
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,13 +27,19 @@ import androidx.core.content.getSystemService
 import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
+import com.example.clipboardmanager.util.fetchClipboardItems
+import com.example.clipboardmanager.util.saveClipboardItem
 import com.example.clipboardmanager.widgets.ClipboardItemCard
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 
 fun ClipboardManagerApp(navController: NavController) {
+
 
 
     val context = LocalContext.current
@@ -48,14 +53,30 @@ fun ClipboardManagerApp(navController: NavController) {
 
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
     if (backDispatcher != null) {
         com.example.clipboardmanager.util.BackHandler(backDispatcher = backDispatcher) {
             navController.navigate(route = AppScreens.ClipboardManagerApp.name)
         }
     }
 
+    DisposableEffect(Unit) {
+        val job = coroutineScope.launch {
+            fetchClipboardItems { items ->
+                clipboardTexts.clear()
+                clipboardTexts.addAll(0,items)
+            }
+        }
+        onDispose {
+            job.cancel()
+        }
+    }
 
-        Column(
+
+
+    Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
@@ -97,7 +118,8 @@ fun ClipboardManagerApp(navController: NavController) {
                         .fillMaxSize()
                         .padding(8.dp)
                 ) {
-                    items(filteredClipboardTexts) { item ->
+                    //filteredClipboardTexts
+                    items(clipboardTexts) { item ->
                         ClipboardItemCard(clipboardItem = item,
                             navController,
                             onDeleteClick = { deletedItem ->
@@ -119,8 +141,12 @@ fun ClipboardManagerApp(navController: NavController) {
                     val text = clipData?.getItemAt(0)?.text.toString()
 
                     if (text.isNotEmpty() && !clipboardTexts.any { it.text == text }) {
+
                         val clipboardItem = ClipboardItem(text, System.currentTimeMillis())
                         clipboardTexts.add(0, clipboardItem)
+
+                        saveClipboardItem(clipboardItem)
+
 
                         // Update filteredClipboardTexts based on the search query
                         if (searchQuery.isBlank() || clipboardItem.text.contains(
@@ -146,12 +172,15 @@ fun ClipboardManagerApp(navController: NavController) {
                 job.cancel()
             }
         }
-//        Toast.makeText(context, "Yes user", Toast.LENGTH_SHORT).show()
+}
 
+private fun saveUserDataToDatabase(user: FirebaseUser?, str: ClipboardItem) {
 
+    val database = FirebaseDatabase.getInstance()
+    val usersRef = database.getReference("users")
 
-
-
+    // Use the user's UID as the key in the database
+    usersRef.child(user!!.uid).child(System.currentTimeMillis().toString()).setValue(str)
 }
 
 

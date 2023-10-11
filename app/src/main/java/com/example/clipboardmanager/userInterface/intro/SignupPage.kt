@@ -70,19 +70,16 @@ fun SignupScreen(navController: NavController) {
     val emailRegex = Regex("^\\S+@\\S+\\.\\S+$")
 
     val firebaseAuth:FirebaseAuth=FirebaseAuth.getInstance()
-
     fun isValidEmailFormat(email: String): Boolean {
         return emailRegex.matches(email)
     }
 
 
-
     val density = LocalDensity.current.density
-
-    // Gradient background
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
+
         Spacer(
             modifier = Modifier
                 .fillMaxSize()
@@ -113,6 +110,7 @@ fun SignupScreen(navController: NavController) {
                     contentDescription = null, // Set appropriate content description
                     modifier = Modifier.size(48.dp)
                 )
+
                 Text(
                     text = "ClipBoard Manager",
                     style = MaterialTheme.typography.headlineSmall,
@@ -225,6 +223,7 @@ fun SignupScreen(navController: NavController) {
                      if(it.isSuccessful){
 
                          val currentUser = FirebaseAuth.getInstance().currentUser
+
                          if (currentUser != null) {
                              val user = User(currentUser.uid, email, password)
                              saveUserDataToDatabase(user)
@@ -232,6 +231,7 @@ fun SignupScreen(navController: NavController) {
 
                          Toast.makeText(context, "SignUp Successfully", Toast.LENGTH_SHORT).show()
                          navController.navigate(route = AppScreens.ClipboardManagerApp.name)
+
                      }else{
                          Toast.makeText(context, "SignUp Failed", Toast.LENGTH_SHORT).show()
                      }
@@ -257,6 +257,8 @@ fun SignupScreen(navController: NavController) {
                     navController.navigate(AppScreens.LoginPage.name)
                 }
             )
+
+
         }
     }
 }
@@ -265,9 +267,9 @@ fun SignupScreen(navController: NavController) {
 private fun saveUserDataToDatabase(user: User) {
     val database = FirebaseDatabase.getInstance()
     val usersRef = database.getReference("users")
-
     // Use the user's UID as the key in the database
-    usersRef.child(user.uid).setValue(user)
+    usersRef.child(user.uid).child("credentials").setValue(user)
+
 }
 
 private fun isValidSignupInput(email: String, password: String, confirmPassword: String): Boolean {
