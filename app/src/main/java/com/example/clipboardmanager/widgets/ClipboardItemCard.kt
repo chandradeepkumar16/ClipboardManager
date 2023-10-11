@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.drawable.Animatable
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateFloatAsState
@@ -59,7 +60,13 @@ import androidx.navigation.NavController
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
 import com.example.clipboardmanager.util.DateFormatting
+import com.example.clipboardmanager.util.currentUser
 import com.example.clipboardmanager.util.shareText
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.filter
 import kotlin.math.absoluteValue
 
@@ -200,14 +207,44 @@ fun ClipboardItemCard(
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {
-                            // Handle delete action here
+
+
+                            val database = FirebaseDatabase.getInstance()
+                            var reference = database.getReference("clipboardItems").child(
+                                currentUser!!.uid)
+
+                            reference.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        for (childSnapshot in dataSnapshot.children) {
+                                            val value = childSnapshot.child("text").value
+                                            if(value.toString()==clipboardItem.text){
+                                                var key = childSnapshot.key.toString()
+                                                Log.e("check", "$key")
+                                                reference.child("$key").removeValue()
+                                            }
+                                        }
+                                    }
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.e("FirebaseData", "Error: ${databaseError.message}")
+                                }
+                            })
+
+
                             onDeleteClick(clipboardItem)
                             clipboardManager?.setPrimaryClip(ClipData.newPlainText(null, ""))
                             isFlipped=!isFlipped
+
+
                         }
                 )
             }
         }
+
+
+
     }
     
     val content: @Composable () -> Unit = if (isFlipped) backContent else  frontContent
@@ -216,6 +253,9 @@ fun ClipboardItemCard(
         content()
     }
 }
+
+
+
 
 
 
