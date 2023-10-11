@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.clipboardmanager.R
 
 @Composable
 fun SearchBar(
@@ -31,7 +32,7 @@ fun SearchBar(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shadowElevation = 4.dp,
-        color = Color(android.graphics.Color.parseColor("#BFBFFD")),
+        color = Color(android.graphics.Color.parseColor("#003541")), //#BFBFFD , #17262A
     ) {
 
         if (searchQuery.isEmpty()) {
@@ -61,7 +62,7 @@ fun SearchBar(
                         onSearch()
                     }
                 ),
-                textStyle = TextStyle(fontSize = 16.sp),
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.White),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(18.dp) // Adjust the height as needed
@@ -89,7 +90,7 @@ private fun SearchIcon(modifier: Modifier, text:String) {
             modifier = modifier
         )
 
-        Text(text = text)
+        Text(text = text, color = Color.White)
     }
 
 }

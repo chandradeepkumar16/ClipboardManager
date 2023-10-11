@@ -88,6 +88,7 @@ fun LoginScreen(navController: NavController) {
                 .background(
                     Brush.verticalGradient(
                         listOf(Color(0xFFADD8E6), Color(0xFF90EE90)), // Light blue to light green
+//                        listOf(Color(0x08B783), Color(0xFF08B783)),
                         startY = 0f,
                         endY = 400 * density
                     )
