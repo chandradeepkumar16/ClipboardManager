@@ -67,6 +67,7 @@ fun ClipboardManagerApp(navController: NavController) {
             fetchClipboardItems { items ->
                 clipboardTexts.clear()
                 clipboardTexts.addAll(0,items)
+                clipboardTexts.reverse()
             }
         }
         onDispose {

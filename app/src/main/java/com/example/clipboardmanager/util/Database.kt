@@ -27,6 +27,8 @@ fun saveClipboardItem(clipboardItem: ClipboardItem) {
 }
 
 
+
+
 fun DataSnapshot.toClipboardItem(): ClipboardItem? {
     return try {
         val text = child("text").getValue(String::class.java)
