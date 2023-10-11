@@ -68,6 +68,10 @@ fun ClipboardManagerApp(navController: NavController) {
                 clipboardTexts.clear()
                 clipboardTexts.addAll(0,items)
                 clipboardTexts.reverse()
+
+                filteredClipboardTexts.clear()
+                filteredClipboardTexts.addAll(0,items)
+                filteredClipboardTexts.reverse()
             }
         }
         onDispose {
@@ -120,7 +124,7 @@ fun ClipboardManagerApp(navController: NavController) {
                         .padding(8.dp)
                 ) {
                     //filteredClipboardTexts
-                    items(clipboardTexts) { item ->
+                    items(filteredClipboardTexts) { item ->
                         ClipboardItemCard(clipboardItem = item,
                             navController,
                             onDeleteClick = { deletedItem ->
