@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.drawable.Animatable
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.Animatable
@@ -91,6 +92,7 @@ fun ClipboardItemCard(
         mutableStateOf(false)
     }
 
+
     val clipboardManager = remember { context.getSystemService<ClipboardManager>() }
 
 
@@ -175,7 +177,7 @@ fun ClipboardItemCard(
                                         .show()
                                 }
                         ) {
-                            Icon(imageVector = Icons.Default.Share, contentDescription = "Copy")
+                            Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                         }
 
                         Spacer(modifier = Modifier.width(18.dp))
@@ -184,7 +186,12 @@ fun ClipboardItemCard(
                             modifier = Modifier
                                 .size(18.dp)
                                 .clickable {
-                                    navController.navigate(route = AppScreens.EditScreen.name)
+
+                                    navController.navigate(
+                                        route = "${AppScreens.EditScreen.name}/${
+                                            Uri.encode(clipboardItem.text)
+                                        }"
+                                    )
                                 }
                         ) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
