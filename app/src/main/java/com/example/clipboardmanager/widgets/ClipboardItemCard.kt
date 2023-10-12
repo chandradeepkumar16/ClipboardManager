@@ -93,7 +93,7 @@ fun ClipboardItemCard(
                 .fillMaxWidth()
                 .padding(4.dp),
             shape = RoundedCornerShape(8.dp),
-            color = Color(android.graphics.Color.parseColor("#08B783")) //"#A8DADC"
+            color = Color(android.graphics.Color.parseColor("#A8DADC")) //"#A8DADC" , #08B783
         ) {
 
 
