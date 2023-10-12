@@ -30,8 +30,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
@@ -54,9 +60,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.navigation.NavController
+import com.example.clipboardmanager.R
 import com.example.clipboardmanager.data.ClipboardItem
 import com.example.clipboardmanager.navigation.AppScreens
 import com.example.clipboardmanager.util.DateFormatting
@@ -138,9 +146,24 @@ fun ClipboardItemCard(
                             .fillMaxWidth()
                             .padding(end = 4.dp)
                     ) {
+
                         Box(
                             modifier = Modifier
-                                .size(15.dp)
+                                .size(18.dp)
+                                .clickable {
+                                    Toast.makeText(context,"Copied to clipboard", Toast.LENGTH_SHORT).show()
+                                    val clip = ClipData.newPlainText("latesttext", clipboardItem.text)
+                                    clipboardManager!!.setPrimaryClip(clip)
+                                }
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.ic_clip), contentDescription ="Copy" )
+                        }
+
+                        Spacer(modifier = Modifier.width(18.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .size(18.dp)
                                 .clickable {
                                     shareText(text = clipboardItem.text, context = context)
                                     Toast
@@ -159,13 +182,15 @@ fun ClipboardItemCard(
 
                         Box(
                             modifier = Modifier
-                                .size(15.dp)
+                                .size(18.dp)
                                 .clickable {
                                     navController.navigate(route = AppScreens.EditScreen.name)
                                 }
                         ) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
+
+
                     }
                 }
             }
@@ -210,18 +235,23 @@ fun ClipboardItemCard(
 
 
                             val database = FirebaseDatabase.getInstance()
-                            var reference = database.getReference("clipboardItems").child(
-                                currentUser!!.uid)
+                            var reference = database
+                                .getReference("clipboardItems")
+                                .child(
+                                    currentUser!!.uid
+                                )
 
                             reference.addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                                     if (dataSnapshot.exists()) {
                                         for (childSnapshot in dataSnapshot.children) {
                                             val value = childSnapshot.child("text").value
-                                            if(value.toString()==clipboardItem.text){
+                                            if (value.toString() == clipboardItem.text) {
                                                 var key = childSnapshot.key.toString()
                                                 Log.e("check", "$key")
-                                                reference.child("$key").removeValue()
+                                                reference
+                                                    .child("$key")
+                                                    .removeValue()
                                             }
                                         }
                                     }
@@ -235,7 +265,7 @@ fun ClipboardItemCard(
 
                             onDeleteClick(clipboardItem)
                             clipboardManager?.setPrimaryClip(ClipData.newPlainText(null, ""))
-                            isFlipped=!isFlipped
+                            isFlipped = !isFlipped
 
 
                         }
